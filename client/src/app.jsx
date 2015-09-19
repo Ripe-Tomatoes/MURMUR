@@ -30,7 +30,7 @@ var App = React.createClass({
   render: function(){
     return (
       <div>
-        <TopBar/>
+        <TopBar />
         <RouteHandler/>
       </div>
     );
@@ -45,6 +45,7 @@ var mainView = React.createClass({
       messages: '',
       sort: 'recent',
       roomname: this.props.params.roomname,
+      room: '',
       token: '',
       auth: '',
       sessions: ''
@@ -54,7 +55,7 @@ var mainView = React.createClass({
   // Retrieve the messages data from Firebase
   componentWillMount: function(){
     var roomname = this.state.roomname;
-    console.log('ROOM',this.state.roomname)
+    console.log('THIS IS ROOMNAME',this.state.roomname)
     $.ajax({
       type: "POST",
       url: 'checkroom',
@@ -114,6 +115,9 @@ var mainView = React.createClass({
       this.messageRef.on('value', function(dataSnapshot){
         // this.messages.push(dataSnapshot.val());
         var temp = dataSnapshot.val();
+        this.setState({
+          room: temp['roomname']
+        })
         delete temp['email']
         delete temp['roomname']
         console.log('this is datasnapshotval:',temp)
@@ -155,7 +159,9 @@ var mainView = React.createClass({
       <div>
         <div>
           <div style={this.styles.filter}>
+           <p> { this.state.room } </p>
             <div className="btn-group" style={{display: 'inline-block'}}>
+
               <button className="btn btn-default" style={{fontFamily: 'Roboto'}} onClick={ this.handleSortRecent }> New </button>
               <button className="btn btn-default" style={{fontFamily: 'Roboto'}} onClick={ this.handleSortPopular }> Hot </button>
               <button className="btn btn-default" style={{fontFamily: 'Roboto'}} onClick={ this.handleFavorites }>Favorites</button>
